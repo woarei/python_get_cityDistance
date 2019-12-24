@@ -40,7 +40,7 @@
 
 **public/config.py**
 
-```
+```python
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #__author__: stray_camel
@@ -70,7 +70,7 @@ print(sh.row(rx))
 获取excel的数据构造sql语句，创建city表（湖北省）样表
 
 **process_data/excel2sql.py**
-```
+```python
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #__author__: stray_camel
@@ -91,7 +91,7 @@ class Excel2Sql(object):
 
 当我们生成这个Excel2Sql对象的时候，我们希望按照类似
 
-```
+```python
 excel_data = excel2sql.Excel2Sql("fiel_name","sheet_name")
 ```
 
@@ -110,7 +110,7 @@ excel表中，我们按照下面的形式进行存储数据：
 
 在类Excel2Sql中定义方法：
 
-```
+```python
 def init_SampleViaProvince_name(
         self, 
         Province_name:"省名"
@@ -128,7 +128,7 @@ def init_SampleViaProvince_name(
 之后我们可以测试类的构造是否正确，或进行调试：
 在文件末端编写：
 
-```
+```python
 if __name__ == "__main__":
     test = Excel2Sql(config.src_path+"\\data\\2019最新全国城市省市县区行政级别对照表(194).xls","全国城市省市县区域列表")
     print(test.init_SampleViaProvince_name("北京市"))
@@ -136,7 +136,7 @@ if __name__ == "__main__":
 
 测试结果：
 
-```
+```bash
 (env) PS F:\览众数据> & f:/览众数据/env/Scripts/python.exe f:/览众数据/城市距离爬取/process_data/excel2sql.py
 [['北京市东城区', 1, '116.416357,39.928353'], ['北京市西城区', 1, '116.365868,39.912289'], ['北京市崇文区', 1,
 '116.416357,39.928353'], ['北京市宣武区', 1, '116.365868,39.912289'], ['北京市朝阳区', 1, '116.601144,39.948574'], ['北京市丰台区', 1, '116.287149,39.858427'], ['北京市石景山区', 1, '116.222982,39.906611'], ['北京市海淀区', 1, '116.329519,39.972134'], ['北京市门头沟区', 1, '116.102009,39.940646'], ['北京市房山区', 1, '116.143267,39.749144'], ['北京市通州区', 1, '116.656435,39.909946'], ['北京市顺义区', 1, '116.654561,40.130347'], ['北京市昌
@@ -174,7 +174,7 @@ if __name__ == "__main__":
 具体过程不赘述，直接上代码
 
 **op_postgresql/opsql.py**:
-```
+```python
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #__author__: stray_camel
@@ -226,7 +226,10 @@ class OperationDbInterface(object):
             logger.exception(e)
         return result
     
+```
 
+继续写（代码长了，怕显示出错）
+```python
     #定义在sample_route表中插入数据操作
     def insert_sample_route(self, 
     condition : "insert语句" ,
@@ -301,7 +304,7 @@ https://docs.python.org/zh-cn/3/library/logging.html?highlight=logging#module-lo
 logging作为python老牌库，在[https://docs.python.org/zh-cn/3/library/index.html](https://docs.python.org/zh-cn/3/library/index.html "https://docs.python.org/zh-cn/3/library/index.html")中一般都搜索的到，参数的说明不过多的赘述。
 因为我的代码都是用utf-8写的所以在basicConfig配置时，加入了utf-8的信息。
 
-```
+```python
 result={'code':'9999','message':'执行批量插入异常','data':[]}
             print ("数据库错误|insert_data : %s" % (e.args[0]))
             logging.basicConfig(stream=open(config.src_path + '/log/syserror.log', encoding="utf-8", mode="a"), level = logging.DEBUG, format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s')
@@ -318,7 +321,7 @@ result={'code':'9999','message':'执行批量插入异常','data':[]}
 解析html发现
 测试结果：网站的数据是通过js文件获取传参的。
 
-```
+```python
 var map = new BMap.Map("container");
 map.centerAndZoom(new BMap.Point(116.404, 39.915), 14);
 
@@ -404,7 +407,7 @@ map.centerAndZoom(new BMap.Point(116.404, 39.915), 14);
 申请个人的key。每日调用量有上线，所以只能一点点的做。
 我们将申请到的key写入配置信息文件中：
 public/config.py
-```
+```python
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #__author__: stray_camel
@@ -423,7 +426,7 @@ geo_key = '3e2235273ddtestdef4'
 首先前往高德地图注册个人用户，获取一个key，之后我们可以通过构造url，通过request来获取数据。
 
 通过address获取经纬度：
-```
+```python
 def get_coordinatesViaaddress(self, 
     address:"地点名"
     ) -> "返回str类型的经纬度":
@@ -439,7 +442,7 @@ def get_coordinatesViaaddress(self,
 ```
 
 通过城市list获取两点之间距离和出行方式：
-```
+```python
 def get_disViaCoordinates(self,
     addList:"一个列表存放地址数据"
     ) ->  "{'origin':[],'destination':[],'distance':[],'route':[]}":
@@ -478,7 +481,7 @@ def get_disViaCoordinates(self,
 sample_table
 
 数据库的内容我就用json表示了哈：
-```
+```json
 [
   {
     "address": "湖北省武汉市江岸区",
@@ -499,7 +502,7 @@ sample_table
 ```
 
 sample_route，以sample_table前三个数据为例做出查询，和返回。
-```
+```json
 [
   {
     "origin": "湖北省武汉市江岸区",
@@ -526,7 +529,7 @@ sample_route，以sample_table前三个数据为例做出查询，和返回。
 BUG:
 问题：在process_data/excel2sql.py，调用格比public/config.py接口
 问题：当我们访问隔壁文件夹的接口时，如果发现调用不了，可以在当前文件的头部加入：
-```
+```python
 import sys,os
 absPath = os.path.abspath(__file__)   #返回代码段所在的位置，肯定是在某个.py文件中
 temPath = os.path.dirname(absPath)    #往上返回一级目录，得到文件所在的路径
